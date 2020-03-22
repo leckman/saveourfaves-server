@@ -11,10 +11,7 @@ import pandas as pd
 from shapely.geometry import Polygon as ShapelyPolygon
 
 fl = sys.argv[1]
-area_to_use = sys.argv[2]
-
-insert_if_not_found = sys.argv[3] == 'yes' if len(sys.argv) > 3 else False
-area = Area.objects.get(key=area_to_use)
+insert_if_not_found = sys.argv[2] == 'yes' if len(sys.argv) > 2 else False
 
 df = pd.read_csv(fl)
 
@@ -47,6 +44,6 @@ for _, row in df.iterrows():
         continue
     n.lat = lat
     n.lng = lng
-    n.area = area
+    n.area = Area.objects.get(key=row["Region Key"])
     n.rank = row.get('Rank') if not pd.isna(row.get('Rank')) else None
     n.save()
